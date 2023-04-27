@@ -1,37 +1,43 @@
 import {
   NewGravatar as NewGravatarEvent,
-  UpdatedGravatar as UpdatedGravatarEvent
-} from "../generated/GravatarRegistry/GravatarRegistry"
-import { NewGravatar, UpdatedGravatar } from "../generated/schema"
+  UpdatedGravatar as UpdatedGravatarEvent,
+} from "../generated/GravatarRegistry/GravatarRegistry";
+// Import entity class
+import { Gravatar } from "../generated/schema";
 
+// Import entity class
 export function handleNewGravatar(event: NewGravatarEvent): void {
-  let entity = new NewGravatar(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.GravatarRegistry_id = event.params.id
-  entity.owner = event.params.owner
-  entity.displayName = event.params.displayName
-  entity.imageUrl = event.params.imageUrl
+  // Use id field from emitted event as unique id for the entity
+  const id = event.params.id.toHex();
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  // Create a new Gravatar Entity with unique id
+  const gravatar = new Gravatar(id);
 
-  entity.save()
+  // Set Gravatar Entity fields
+  gravatar.owner = event.params.owner;
+  gravatar.displayName = event.params.displayName;
+  gravatar.imageUrl = event.params.imageUrl;
+
+  // Save entity to store
+  gravatar.save();
 }
-
 export function handleUpdatedGravatar(event: UpdatedGravatarEvent): void {
-  let entity = new UpdatedGravatar(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.GravatarRegistry_id = event.params.id
-  entity.owner = event.params.owner
-  entity.displayName = event.params.displayName
-  entity.imageUrl = event.params.imageUrl
+  // Use proper id to load an entity from store
+  const id = event.params.id.toHex();
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  // Load the entity to be updated
+  let gravatar = Gravatar.load(id);
 
-  entity.save()
+  // Create the entity if it doesn't already exist
+  if (!gravatar) {
+    gravatar = new Gravatar(id);
+  }
+
+  // Set updated fields to entity
+  gravatar.owner = event.params.owner;
+  gravatar.displayName = event.params.displayName;
+  gravatar.imageUrl = event.params.imageUrl;
+
+  // Save updated entity to store
+  gravatar.save();
 }
