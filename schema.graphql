@@ -1,0 +1,21 @@
+type NewGravatar @entity(immutable: true) {
+  id: Bytes!
+  GravatarRegistry_id: BigInt! # uint256
+  owner: Bytes! # address
+  displayName: String! # string
+  imageUrl: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type UpdatedGravatar @entity(immutable: true) {
+  id: Bytes!
+  GravatarRegistry_id: BigInt! # uint256
+  owner: Bytes! # address
+  displayName: String! # string
+  imageUrl: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

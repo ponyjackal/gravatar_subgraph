@@ -1,0 +1,8 @@
+{
+  "mainnet": {
+    "GravatarRegistry": {
+      "address": "0x2e645469f354bb4f5c8a05b3b30a929361cf77ec",
+      "startBlock": 6175244
+    }
+  }
+}
